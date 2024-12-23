@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import './styles.css'; // Import the stylesheet
+import './styles.css';
 
 interface Transaction {
   txHash: string;
@@ -14,6 +14,7 @@ interface GasData {
 }
 
 export default function Page() {
+  const [wallet, setWallet] = useState<string | null>(null);
   const [gasInfo, setGasInfo] = useState<GasData>({
     remainingGas: 0,
     history: [],
@@ -22,9 +23,29 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Fetch wallet from the logged-in user (or prompt for input as fallback)
+    const userWallet = localStorage.getItem('userWallet'); // Example storage
+    if (userWallet) {
+      setWallet(userWallet);
+    } else {
+      const walletInput = prompt('Please enter your wallet address:');
+      if (walletInput) {
+        setWallet(walletInput);
+        localStorage.setItem('userWallet', walletInput);
+      } else {
+        setError('Wallet address is required to fetch gas data.');
+        setLoading(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!wallet) return;
+
     const fetchGasData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch('/api/frame');
+        const response = await fetch(`/api/frame?wallet=${wallet}`);
         if (!response.ok) {
           throw new Error('Failed to fetch gas data');
         }
@@ -37,7 +58,7 @@ export default function Page() {
       }
     };
     fetchGasData();
-  }, []);
+  }, [wallet]);
 
   if (loading) {
     return <p className="loading-text">Loading gas data...</p>;

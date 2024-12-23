@@ -1,3 +1,4 @@
+/* Body Background and Font */
 body {
   background: #0052ff; /* Base blue background */
   color: #ffffff;
@@ -45,6 +46,7 @@ body::after {
   z-index: 1;
 }
 
+/* Container with animation */
 .container {
   position: relative;
   z-index: 2;
@@ -52,44 +54,70 @@ body::after {
   border-radius: 50%;
   width: 500px;
   height: 500px;
-  background: #000000;
+  background: #111111; /* Darker background for the container */
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow-y: auto;
+  animation: heartbeat 1s ease-in-out infinite; /* Heartbeat animation */
 }
 
-/* Keep your existing styles for the content below, just adjust some spacing */
+/* Adjust text colors */
 .title {
   font-size: 28px;
   margin-bottom: 20px;
+  color: #ffb600; /* Bright yellow for titles */
 }
 
 .remaining-gas,
 .transaction-history {
   width: 80%;
   margin: 10px 0;
+  color: #e5e5e5; /* Light gray for section text */
 }
 
+/* Gas price output */
+.gas-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00ffcc; /* Bright teal for gas price */
+}
+
+/* Transaction history output */
 .history-list {
   max-height: 200px;
   overflow-y: auto;
 }
 
-/* Maintain your existing styles for other elements */
-.gas-price,
-.history-item,
-.tx-hash,
-.gas-used,
-.no-transactions,
-.loading-text,
-.error-text {
-  /* Keep your existing styles */
+.history-item {
+  font-size: 16px;
+  color: #c6c6c6; /* Slightly lighter gray for transaction items */
 }
 
-/* Adjust scrollbar for the container */
+.tx-hash {
+  color: #ff8c00; /* Orange color for transaction hashes */
+  font-weight: bold;
+}
+
+.gas-used {
+  color: #ff5f5f; /* Red color for gas used */
+  font-weight: bold;
+}
+
+.no-transactions {
+  color: #999999; /* Gray for no transactions text */
+}
+
+/* Loading and Error Text */
+.loading-text,
+.error-text {
+  color: #ff3333; /* Red color for error and loading states */
+  font-weight: bold;
+}
+
+/* Scrollbar Styling */
 .container::-webkit-scrollbar {
   width: 5px;
 }
@@ -103,20 +131,26 @@ body::after {
   border-radius: 10px;
 }
 
-/* Add these keyframes at the end of your CSS file */
-@keyframes breathe {
+/* Heartbeat Animation */
+@keyframes heartbeat {
   0% {
     transform: scale(1);
   }
+  25% {
+    transform: scale(1.1); /* Increased scale for noticeable change */
+  }
   50% {
-    transform: scale(1.02);
+    transform: scale(0.95); /* Slight compression like a heartbeat */
+  }
+  75% {
+    transform: scale(1.05); /* Another expansion before resetting */
   }
   100% {
     transform: scale(1);
   }
 }
 
-/* Modify your container class to include the animation */
+/* Apply the updated animation to the container */
 .container {
   position: relative;
   z-index: 2;
@@ -131,5 +165,5 @@ body::after {
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  animation: breathe 4s ease-in-out infinite; /* Added this line */
+  animation: heartbeat 5s ease-in-out infinite; /* Slower duration for reduced pumping */
 }

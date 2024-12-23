@@ -3,7 +3,14 @@ import axios from 'axios';
 
 const ETHERSCAN_API_KEY = '75283E1SG7GNYY3VH3YU13XSPDGDTYI1NZ'; // Etherscan API key
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const wallet = searchParams.get('wallet');
+
+  if (!wallet) {
+    return NextResponse.json({ error: 'Wallet address is required' }, { status: 400 });
+  }
+
   try {
     // Fetching the current gas price in gwei from Etherscan
     const gasPriceResponse = await axios.get('https://api.etherscan.io/api', {
@@ -18,12 +25,12 @@ export async function GET() {
     const gasPriceInWei = parseInt(gasPriceResponse.data.result, 16);
     const gasPriceInGwei = gasPriceInWei / 10 ** 9; // Convert Wei to Gwei
 
-    // Fetching transaction history
+    // Fetching transaction history for the provided wallet
     const response = await axios.get('https://api.etherscan.io/api', {
       params: {
         module: 'account',
         action: 'txlist',
-        address: '0xA22Ec001DB5c3624d970A0F9Ce1492E101815a94', // Wallet address
+        address: wallet, // Use wallet dynamically
         startblock: 0,
         endblock: 99999999,
         sort: 'asc',
